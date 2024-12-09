@@ -39,7 +39,7 @@ class RegisterTest extends TestCase
         $_REQUEST['submitDangky'] = true;
 
         ob_start();
-        include 'path/to/your/script.php';
+        include 'C:\xampp\htdocs\ProjectWeb\xulySigup.php';
         $output = ob_get_clean();
         $this->assertStringContainsString("Error", $output);
     }
