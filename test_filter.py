@@ -5,6 +5,7 @@ import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
+import login as l
 @pytest.fixture
 def driver():
     # Tự động quản lý ChromeDriver
@@ -15,12 +16,7 @@ def driver():
 
 
 def test_brand_filter(driver):
-    driver.get("http://localhost/ProjectWeb/index.php")
-    driver.find_element(By.XPATH, "//*[@id='user-img']").click()
-    driver.find_element(By.XPATH, "//*[@id='user-btn']").click()
-    driver.find_element(By.XPATH, "//*[@id='username']").send_keys("tester111")
-    driver.find_element(By.XPATH, "//*[@id='password']").send_keys("123456789")
-    driver.find_element(By.CLASS_NAME, "submit-btn").click()
+    l.login(driver)
     time.sleep(2)
     dropdown = driver.find_element(By.XPATH, "//*[@id='select-brand']")
     select = Select(dropdown)
@@ -36,12 +32,7 @@ def test_brand_filter(driver):
 
 
 def test_filter_range_prices(driver):
-    driver.get("http://localhost/ProjectWeb/index.php")
-    driver.find_element(By.XPATH, "//*[@id='user-img']").click()
-    driver.find_element(By.XPATH, "//*[@id='user-btn']").click()
-    driver.find_element(By.XPATH, "//*[@id='username']").send_keys("tester111")
-    driver.find_element(By.XPATH, "//*[@id='password']").send_keys("123456789")
-    driver.find_element(By.CLASS_NAME, "submit-btn").click()
+    l.login(driver)
     time.sleep(2)
     dropdown = driver.find_element(By.XPATH, "//*[@id='select-cost']")
     select = Select(dropdown)
@@ -60,12 +51,7 @@ def test_filter_range_prices(driver):
     print(product_prices)
 
 def test_filter_price(driver):
-    driver.get("http://localhost/ProjectWeb/index.php")
-    driver.find_element(By.XPATH, "//*[@id='user-img']").click()
-    driver.find_element(By.XPATH, "//*[@id='user-btn']").click()
-    driver.find_element(By.XPATH, "//*[@id='username']").send_keys("tester111")
-    driver.find_element(By.XPATH, "//*[@id='password']").send_keys("123456789")
-    driver.find_element(By.CLASS_NAME, "submit-btn").click()
+    l.login(driver)
     time.sleep(2)
     dropdown = driver.find_element(By.XPATH, "//*[@id='select-sort']")
     select = Select(dropdown)
