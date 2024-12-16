@@ -44,17 +44,25 @@ def test_checkout_cod(driver):
     driver.find_element(By.XPATH,"//*[@id='cod']").click()
     phone_number="0123456789"
     driver.find_element(By.XPATH, '//*[@id="sdt"]').send_keys(phone_number)
+     #price
+    price_bf=driver.find_element(By.XPATH,"//*[@id='myTD1']").text
+    print(price_bf)
     driver.find_element(By.XPATH,"//*[@id='billajax']/table/tbody/tr[4]/td[2]/button").click()
     time.sleep(5)
-    expected_id="#50"
+    expected_id="#62"
     driver.find_element(By.XPATH,"/html/body/div[1]/div/a[2]/img").click()
     time.sleep(2)
     order_history=driver.find_element(By.XPATH,"//*[@id='boxajax']").text
+    price_history = re.findall(r"\d[\d.,]*₫", order_history)
+    price_history_cleaned = [price.replace("₫", "") for price in price_history]
+
     order_ids = re.findall(r"#\d+", order_history)    
     if order_ids:
         last_order_id = order_ids[-1]
+        last_price=price_history_cleaned[-1]
+        print(last_price)
         print(last_order_id)
-        assert last_order_id == expected_id, f"Expected ID: {expected_id}, but got: {last_order_id}"
+        assert last_order_id == expected_id and last_price == price_bf , f"Expected ID and price: {expected_id},{price_bf}, but got: {last_order_id},{last_price}"
     else:
         raise AssertionError("No orders found in order history")
 
