@@ -226,4 +226,4 @@ def test_decrease_quantity(driver):
     price_af = driver.find_element(By.XPATH, "//*[@id='boxajax-containter']/table/tbody/tr[2]/td[3]").text
     price_af = float(price_af.replace("₫", "").replace(".", "").strip())
     expected_price_af = price_bf / num_click
-    assert price_af == expected_price_af, f"Failed to increase: {price_bf} and {expected_price_af}"
+    assert price_af == expected_price_af, f"Failed to decrease: {price_bf} and {expected_price_af}"
