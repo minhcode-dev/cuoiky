@@ -235,3 +235,15 @@ def test_decrease_quantity(driver):
     price_af = float(price_af.replace("₫", "").replace(".", "").strip())
     expected_price_af = price_bf / num_click
     assert price_af == expected_price_af, f"Failed to decrease: {price_bf} and {expected_price_af}"
+
+def test_total_price(driver):
+    l.login(driver)
+    time.sleep(2)
+    driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/a[3]/img").click()
+    products = driver.find_element(By.XPATH, "//*[@id='boxajax-containter']").text
+    prices = re.findall(r'\d{1,3}(?:\.\d{3})+(?:₫)', products)
+    prices = [int(price.replace('.', '').replace('₫', '')) for price in prices]
+    total = sum(prices)
+    price_total = driver.find_element(By.XPATH, "//*[@id='myTD1']").text
+    displayed_total = int(price_total.replace('.', ''))
+    assert total == displayed_total, "Mismatch between calculated and displayed total!"
