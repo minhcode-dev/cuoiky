@@ -123,3 +123,18 @@ def test_email_without_com(driver):
     time.sleep(2)
     assert message == "Email Không Hợp Lệ"
 
+def test_email_without_at(driver):
+    driver.get("http://localhost/ProjectWeb/index.php")
+    driver.find_element(By.XPATH, "//*[@id='user-img']").click()
+    driver.find_element(By.XPATH, "//*[@id='user-btn']").click()
+    driver.find_element(By.XPATH, "//*[@id='login-form']/a").click()
+    driver.find_element(By.XPATH, "//*[@id='name']").send_keys("tester")
+    email = "testgmail.com"
+    email_input = driver.find_element(By.XPATH, "//*[@id='email']")
+    email_input.send_keys(email)
+    driver.find_element(By.XPATH, "//*[@id='username']").send_keys("tester111")
+    driver.find_element(By.XPATH, "//*[@id='password']").send_keys("123456789")
+    driver.find_element(By.XPATH, "/html/body/form/div/div/button").click()
+    validation_message = driver.execute_script("return arguments[0].validationMessage;", email_input)
+    expected_message = f"Please include an '@' in the email address. '{email}' is missing an '@'."
+    assert validation_message == expected_message, f"Expected: '{expected_message}', but got: '{validation_message}'"
