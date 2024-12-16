@@ -5,6 +5,7 @@ import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
+import login as l
 @pytest.fixture
 def driver():
     # Tự động quản lý ChromeDriver
@@ -15,12 +16,7 @@ def driver():
 
 #add 1 product
 def test_add_to_cart(driver):
-    driver.get("http://localhost/ProjectWeb/index.php")
-    driver.find_element(By.XPATH,"//*[@id='user-img']").click()
-    driver.find_element(By.XPATH,"//*[@id='user-btn']").click()
-    driver.find_element(By.XPATH,"//*[@id='username']").send_keys("tester111")
-    driver.find_element(By.XPATH,"//*[@id='password']").send_keys("123456789")
-    driver.find_element(By.CLASS_NAME,"submit-btn").click()
+    l.login(driver)
     time.sleep(2)
     driver.find_element(By.XPATH,"//*[@id='boxajax-containter']/section[1]/div/div[1]/div[1]/a/img").click()
     time.sleep(1)
@@ -31,28 +27,18 @@ def test_add_to_cart(driver):
 
 #add 2 or more products
 def test_add_multi_to_cart(driver):
-    driver.get("http://localhost/ProjectWeb/index.php")
-    
-    # Log in to the account
-    driver.find_element(By.XPATH, "//*[@id='user-img']").click()
-    driver.find_element(By.XPATH, "//*[@id='user-btn']").click()
-    driver.find_element(By.XPATH, "//*[@id='username']").send_keys("tester111")
-    driver.find_element(By.XPATH, "//*[@id='password']").send_keys("123456789")
-    driver.find_element(By.CLASS_NAME, "submit-btn").click()
+    l.login(driver)
     time.sleep(2)
-
     # Variables
     added_products = 0
     number_product = 5  # Number of products to add
     container_xpath = "//*[@id='boxajax-containter']/section[1]/div"
     scrollable_container = driver.find_element(By.XPATH, container_xpath)
-
     for i in range(number_product):
         try:
             # Locate product element
             product_xpath = f"{container_xpath}/div[{i + 1}]/div[1]/a/img"
             product_element = driver.find_element(By.XPATH, product_xpath)
-            
             # Scroll product into view
             driver.execute_script("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", product_element)
             time.sleep(1)
@@ -85,17 +71,9 @@ def test_add_multi_to_cart(driver):
     assert added_products == len(cart_product_names), "Failed to add all products"
 
 def test_add_same_product(driver):
-    driver.get("http://localhost/ProjectWeb/index.php")
-    
-    driver.find_element(By.XPATH, "//*[@id='user-img']").click()
-    driver.find_element(By.XPATH, "//*[@id='user-btn']").click()
-    driver.find_element(By.XPATH, "//*[@id='username']").send_keys("tester111")
-    driver.find_element(By.XPATH, "//*[@id='password']").send_keys("123456789")
-    driver.find_element(By.CLASS_NAME, "submit-btn").click()
+    l.login(driver)
     time.sleep(2)
-    
     name_element = driver.find_element(By.XPATH, "//*[@id='boxajax-containter']/section[1]/div/div[1]/div[2]/h2").text
-    
     product_element = driver.find_element(By.XPATH, "//*[@id='boxajax-containter']/section[1]/div/div[1]/div[1]/a/img")
     product_element.click()
     time.sleep(1)
@@ -103,10 +81,8 @@ def test_add_same_product(driver):
     for _ in range(add):
         driver.find_element(By.XPATH, "/html/body/section[1]/div/button").click()
         time.sleep(2)
-    
     driver.find_element(By.XPATH, "/html/body/div[1]/div/a[3]/img").click()
     time.sleep(2)
-    
     quantity_product = driver.find_element(By.XPATH, "//*[@id='boxajax-containter']/table/tbody/tr[2]/td[2]/input").get_attribute("value")
     quantity_product = int(quantity_product)  # Convert value to integer
     name_product = driver.find_element(By.XPATH, "//*[@id='boxajax-containter']/table/tbody/tr[2]/td[1]/div/div/h3").text
